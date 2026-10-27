@@ -21,8 +21,8 @@ cask "hearth" do
 
   caveats <<~EOS
     Hearth is unsigned (no Apple Developer ID yet). On first launch, Gatekeeper will
-    refuse to open it — right-click the app in Finder and choose "Open" once to approve it,
-    or run:
+    refuse to open it. Approve it once in System Settings > Privacy & Security >
+    "Open Anyway", or run:
       xattr -dr com.apple.quarantine /Applications/Hearth.app
   EOS
 end
