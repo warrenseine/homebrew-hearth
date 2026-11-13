@@ -12,6 +12,12 @@ cask "hearth" do
 
   app "Hearth.app"
 
+  # Unsigned app: each release is a new ad-hoc build, so a Gatekeeper "Open Anyway" approval
+  # doesn't survive an upgrade. Strip the quarantine flag so install and upgrade both just work.
+  postflight_steps do
+    run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{appdir}}/Hearth.app"]
+  end
+
   zap trash: [
     "~/Library/Application Support/Hearth",
     "~/Library/Logs/Hearth",
@@ -20,9 +26,9 @@ cask "hearth" do
   ]
 
   caveats <<~EOS
-    Hearth is unsigned (no Apple Developer ID yet). On first launch, Gatekeeper will
-    refuse to open it. Approve it once in System Settings > Privacy & Security >
-    "Open Anyway", or run:
+    Hearth is unsigned (no Apple Developer ID yet). This cask removes the quarantine
+    flag on install and upgrade, so Gatekeeper doesn't block it. If macOS still refuses
+    to open it, run:
       xattr -dr com.apple.quarantine /Applications/Hearth.app
   EOS
 end
